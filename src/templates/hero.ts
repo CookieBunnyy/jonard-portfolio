@@ -1,5 +1,5 @@
 import { profile } from '../content/profile';
-import { ambientRings, roleBadge } from './decor';
+import { ambientRings } from './decor';
 
 /** Vertical offset (px at desktop size) for each portrait strip. */
 const sliceOffsets = [-30, 14, -12, 26, -20];
@@ -50,7 +50,7 @@ export function renderHero(): string {
           </div>
         </div>
 
-        <figure class="hero-in relative mx-auto w-full max-w-sm lg:col-span-5 lg:mb-16 lg:max-w-none" style="--i:3">
+        <figure class="hero-in relative mx-auto mb-10 w-full max-w-sm lg:col-span-5 lg:mb-20 lg:max-w-none" style="--i:3">
           <div class="sliced relative" data-parallax="0.05">
             <!-- Sliced portrait: one photo cut into five offset strips that line up on hover -->
             <div class="sliced-grid grid aspect-[4/5] grid-cols-5">
@@ -61,11 +61,7 @@ export function renderHero(): string {
                     class="slice-img absolute top-0 h-full max-w-none object-cover object-[50%_62%]" />
                 </div>`)}
             </div>
-            ${roleBadge()}
           </div>
-          <figcaption class="mt-10 flex items-center justify-end gap-2 text-sm text-mist-muted sm:mt-12">
-            ${icon('mapPin', 'size-4 text-sage-400')} ${esc(profile.location)}
-          </figcaption>
         </figure>
       </div>
 

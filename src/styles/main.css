@@ -232,21 +232,6 @@
   animation-delay: calc(350ms + var(--n) * 90ms);
 }
 
-/* Rotating role badge */
-.role-badge {
-  box-shadow: 0 0 0 8px var(--color-moss-900);
-  transition: background-color 0.3s ease;
-}
-.role-badge:hover {
-  background-color: var(--color-mist);
-}
-.role-badge-text {
-  animation: spin 22s linear infinite;
-}
-.role-badge:hover .role-badge-text {
-  animation-duration: 8s;
-}
-
 /* Looping background ----------------------------------------------- */
 .ambient-a {
   animation: spin 140s linear infinite;
@@ -606,7 +591,6 @@
   }
   .marquee-track,
   .ambient svg,
-  .role-badge-text,
   .hero-grid-pulse,
   .cover-img {
     animation: none !important;
