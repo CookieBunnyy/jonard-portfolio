@@ -1,0 +1,578 @@
+@import 'tailwindcss';
+
+/* ------------------------------------------------------------------
+   Design tokens — three-colour system
+   1. Moss  (#1A2419)  primary: dark surfaces, text on light
+   2. Sage  (#A3B19B)  secondary: accents, highlights, contact band
+   3. White (#F7F8F4 / #FFFFFF)  tertiary: light sections, cards
+   ------------------------------------------------------------------ */
+@theme {
+  --font-display: 'Jost Variable', 'Futura', 'Century Gothic', ui-sans-serif, sans-serif;
+  --font-sans: 'Open Sans Variable', 'Open Sans', ui-sans-serif, system-ui, sans-serif;
+
+  --color-moss-950: #111910;
+  --color-moss-900: #1a2419;
+  --color-moss-800: #253324;
+  --color-moss-700: #3a4a38;
+  --color-moss-600: #4d5f4a;
+
+  --color-sage-600: #6f806b;
+  --color-sage-500: #8a9a86;
+  --color-sage-400: #a3b19b;
+  --color-sage-200: #d5ddd0;
+  --color-sage-100: #e9eee6;
+
+  --color-mist: #e8ede6;
+  --color-mist-muted: #a7b4a4;
+  --color-paper: #f7f8f4;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5rem;
+    -webkit-text-size-adjust: 100%;
+  }
+  ::selection {
+    background: var(--color-sage-400);
+    color: var(--color-moss-900);
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-sage-400);
+    outline-offset: 3px;
+  }
+  .bg-paper :focus-visible,
+  .bg-sage-400 :focus-visible {
+    outline-color: var(--color-moss-900);
+  }
+  img {
+    user-select: none;
+  }
+}
+
+@layer components {
+  .container-x {
+    @apply mx-auto w-full max-w-[1240px] px-5 sm:px-8 lg:px-10;
+  }
+  .section {
+    @apply py-24 sm:py-32;
+  }
+  .eyebrow {
+    @apply font-display text-xs font-medium tracking-[0.18em] uppercase;
+  }
+
+  /* Buttons ------------------------------------------------------- */
+  .btn {
+    @apply inline-flex items-center gap-2.5 rounded-full px-6 py-3.5 text-sm font-semibold transition duration-300;
+  }
+  .btn .btn-arrow {
+    @apply transition-transform duration-300 ease-out-expo;
+  }
+  .btn:hover .btn-arrow {
+    transform: translateX(3px);
+  }
+  .btn-sage {
+    @apply bg-sage-400 text-moss-900 hover:bg-mist;
+  }
+  .btn-dark {
+    @apply bg-moss-900 text-mist hover:bg-moss-800;
+  }
+  .btn-ghost-dark {
+    @apply border border-moss-700 text-mist hover:border-sage-400 hover:text-sage-400;
+  }
+
+  /* Links --------------------------------------------------------- */
+  .link-underline {
+    background: linear-gradient(currentColor, currentColor) no-repeat 0 100% / 100% 1px;
+    transition: background-size 0.5s var(--ease-out-expo);
+  }
+  .link-underline:hover {
+    background-size: 0% 1px;
+    background-position: 100% 100%;
+  }
+
+  /* Underline that grows in on hover (for quieter links) */
+  .link-grow {
+    background: linear-gradient(currentColor, currentColor) no-repeat 0 100% / 0% 1px;
+    transition:
+      background-size 0.5s var(--ease-out-expo),
+      color 0.3s ease;
+  }
+  .link-grow:hover {
+    background-size: 100% 1px;
+  }
+
+  .nav-link {
+    @apply relative block rounded-full px-4 py-2 text-sm text-mist-muted transition-colors duration-300 hover:text-mist;
+  }
+  .nav-link::after {
+    content: '';
+    @apply absolute bottom-1 left-4 right-4 h-px origin-left scale-x-0 bg-sage-400 transition-transform duration-500 ease-out-expo;
+  }
+  .nav-link:hover::after,
+  .nav-link[aria-current='true']::after {
+    @apply scale-x-100;
+  }
+  .nav-link[aria-current='true'] {
+    @apply text-mist;
+  }
+
+  /* Tags & status ------------------------------------------------- */
+  .tag-dark {
+    @apply rounded-full border border-moss-700 px-3.5 py-1.5 text-xs text-mist-muted transition-colors duration-300 hover:border-sage-500 hover:text-mist;
+  }
+  .status-pill {
+    @apply inline-flex items-center gap-2 rounded-full border border-sage-500/50 px-3.5 py-1.5 text-xs font-semibold text-sage-400;
+  }
+  .status-dot {
+    @apply size-1.5 rounded-full bg-sage-400;
+  }
+  .status-pill[data-status='In progress'] .status-dot {
+    animation: pulse-dot 1.8s ease-in-out infinite;
+  }
+
+  /* Form ---------------------------------------------------------- */
+  .input {
+    @apply w-full rounded-sm border border-sage-200 bg-white px-4 py-3 text-moss-900 transition duration-200 placeholder:text-moss-600/60 focus:border-moss-900 focus:ring-2 focus:ring-moss-900/15 focus:outline-none;
+  }
+  .input[aria-invalid='true'] {
+    @apply border-[#9B2C2C];
+  }
+}
+
+/* ------------------------------------------------------------------
+   Header
+   ------------------------------------------------------------------ */
+.site-header {
+  transition:
+    background-color 0.4s ease,
+    border-color 0.4s ease,
+    transform 0.5s var(--ease-out-expo);
+  border-bottom: 1px solid transparent;
+}
+.site-header[data-scrolled='true'],
+.site-header[data-menu='open'] {
+  background-color: rgb(26 36 25 / 0.92);
+  backdrop-filter: blur(12px);
+  border-color: var(--color-moss-700);
+}
+.site-header[data-hidden='true'] {
+  transform: translateY(-100%);
+}
+.mobile-nav:not([hidden]) {
+  animation: drop-in 0.4s var(--ease-out-expo);
+}
+
+/* ------------------------------------------------------------------
+   Hero
+   ------------------------------------------------------------------ */
+.hero-grid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: linear-gradient(to right, rgb(58 74 56 / 0.35) 1px, transparent 1px);
+  background-size: calc(100% / 6) 100%;
+  mask-image: linear-gradient(to bottom, black, transparent 85%);
+}
+.word-mask {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+  padding-bottom: 0.08em;
+  margin-bottom: -0.08em;
+}
+.word {
+  display: inline-block;
+}
+.js .word {
+  transform: translateY(105%);
+  animation: word-up 0.9s var(--ease-out-expo) forwards;
+  animation-delay: calc(250ms + var(--i) * 70ms);
+}
+.js .hero-in {
+  opacity: 0;
+  animation: fade-up 1s var(--ease-out-expo) forwards;
+  animation-delay: calc(var(--i) * 90ms);
+}
+.portrait-frame {
+  transition: transform 0.8s var(--ease-out-expo);
+}
+.portrait:hover .portrait-frame {
+  transform: translate(0, 0);
+}
+
+/* Slant motif ---------------------------------------------------------
+   One angle for every slanted edge on the page. The portrait edges drop
+   14% of the width-based height; .slant-box uses a fixed pixel depth. */
+.slant-portrait {
+  clip-path: polygon(0 14%, 100% 0, 100% 86%, 0 100%);
+}
+.slant-box {
+  --slant: 28px;
+  clip-path: polygon(0 var(--slant), 100% 0, 100% calc(100% - var(--slant)), 0 100%);
+}
+@media (min-width: 768px) {
+  .slant-box {
+    --slant: 56px;
+  }
+}
+
+.portrait-shadow {
+  transition: transform 0.8s var(--ease-out-expo);
+}
+.portrait:hover .portrait-shadow {
+  transform: translate(0, 0);
+}
+.portrait-bands .band-top,
+.portrait-bands .band-bottom,
+.portrait-bands .band-bottom-fill {
+  transition: transform 0.9s var(--ease-out-expo);
+}
+/* Bands slide in along the slant on load, and drift apart on hover */
+.js .portrait-bands .band-top {
+  animation: band-in-top 1.2s var(--ease-out-expo) 0.5s both;
+}
+.js .portrait-bands .band-bottom,
+.js .portrait-bands .band-bottom-fill {
+  animation: band-in-bottom 1.2s var(--ease-out-expo) 0.65s both;
+}
+.portrait:hover .band-top {
+  transform: translate(3px, -0.5px);
+}
+.portrait:hover .band-bottom,
+.portrait:hover .band-bottom-fill {
+  transform: translate(-3px, 0.5px);
+}
+
+/* Looping background ----------------------------------------------- */
+.ambient-a {
+  animation: spin 140s linear infinite;
+}
+.ambient-b {
+  opacity: 0.6;
+  transform: scale(0.82);
+  animation: spin-reverse 95s linear infinite;
+}
+.hero-grid-pulse {
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  height: 30%;
+  background: linear-gradient(to bottom, transparent, rgb(163 177 155 / 0.18), transparent);
+  /* Only shows on the grid's 1px vertical lines */
+  mask-image: linear-gradient(to right, black 1px, transparent 1px);
+  mask-size: calc(100% / 6) 100%;
+  animation: grid-pulse 9s ease-in-out infinite;
+}
+
+/* Bento gallery ------------------------------------------------------ */
+.bento-caption {
+  transition: transform 0.6s var(--ease-out-expo);
+}
+.bento-cell:hover .bento-caption {
+  transform: translateY(-6px);
+}
+
+/* Cover banner ------------------------------------------------------- */
+.cover-img {
+  animation: ken-burns 26s ease-in-out infinite alternate;
+}
+.cover-line {
+  overflow: hidden;
+}
+.cover-line .line-inner {
+  display: inline-block;
+}
+.js .cover .line-inner {
+  transform: translateY(110%);
+  transition: transform 1s var(--ease-out-expo);
+  transition-delay: calc(200ms + var(--l, 0) * 90ms);
+}
+.js .cover.is-visible .line-inner {
+  transform: none;
+}
+
+/* Marquee ----------------------------------------------------------- */
+.marquee {
+  overflow: hidden;
+}
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 38s linear infinite;
+}
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+.marquee-group {
+  display: flex;
+  align-items: center;
+  gap: 2.5rem;
+  padding-right: 2.5rem;
+}
+
+/* ------------------------------------------------------------------
+   Cards & rows
+   ------------------------------------------------------------------ */
+.skill-card {
+  transition: background-color 0.4s ease;
+}
+.skill-card:hover {
+  background-color: var(--color-sage-100);
+}
+.skill-item {
+  transition: transform 0.4s var(--ease-out-expo);
+}
+.skill-card:hover .skill-item {
+  transform: translateX(4px);
+}
+.skill-card:hover .skill-item:nth-child(2) {
+  transition-delay: 40ms;
+}
+.skill-card:hover .skill-item:nth-child(3) {
+  transition-delay: 80ms;
+}
+
+.timeline-row {
+  transition: padding 0.5s var(--ease-out-expo);
+}
+@media (hover: hover) and (min-width: 768px) {
+  .timeline-row:hover {
+    padding-left: 1rem;
+  }
+}
+
+.cert-card {
+  transition:
+    transform 0.5s var(--ease-out-expo),
+    box-shadow 0.5s var(--ease-out-expo),
+    border-color 0.3s ease;
+}
+.cert-card:hover {
+  transform: translateY(-6px);
+  border-color: var(--color-sage-500);
+  box-shadow: 0 24px 50px -28px rgb(26 36 25 / 0.45);
+}
+.cert-img {
+  transition: transform 0.7s var(--ease-out-expo);
+}
+.cert-card:hover .cert-img {
+  transform: scale(1.03) rotate(-0.6deg);
+}
+
+.project-row summary::-webkit-details-marker {
+  display: none;
+}
+.project-row summary:hover .row-icon,
+.project-row[open] .row-icon {
+  background-color: var(--color-sage-400);
+  border-color: var(--color-sage-400);
+  color: var(--color-moss-900);
+}
+.project-row[open] .row-icon {
+  transform: rotate(45deg);
+}
+.project-row[open] .row-body {
+  animation: fade-up 0.5s var(--ease-out-expo);
+}
+
+.sitemap-block {
+  border: 1px solid var(--color-moss-700);
+  border-radius: 4px;
+  padding: 0.85rem 1rem;
+  background: var(--color-moss-900);
+  transition: border-color 0.3s ease;
+}
+.sitemap-block:hover {
+  border-color: var(--color-sage-500);
+}
+
+/* ------------------------------------------------------------------
+   Scroll reveal (only when JS is running)
+   ------------------------------------------------------------------ */
+.js [data-reveal] {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity 0.9s var(--ease-out-expo),
+    transform 0.9s var(--ease-out-expo);
+  transition-delay: var(--d, 0ms);
+}
+.js [data-reveal].is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* ------------------------------------------------------------------
+   Back to top & lightbox
+   ------------------------------------------------------------------ */
+.back-to-top {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(12px);
+  transition:
+    opacity 0.3s ease,
+    transform 0.4s var(--ease-out-expo),
+    background-color 0.3s ease;
+}
+.back-to-top[data-visible='true'] {
+  opacity: 1;
+  pointer-events: auto;
+  transform: none;
+}
+.back-to-top:hover {
+  transform: translateY(-3px);
+}
+
+.lightbox {
+  width: 100vw;
+  height: 100dvh;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: rgb(17 25 16 / 0.97);
+}
+.lightbox::backdrop {
+  background: rgb(17 25 16 / 0.8);
+}
+.lightbox[open] {
+  animation: fade-in 0.3s ease;
+}
+.lightbox-img {
+  animation: zoom-in 0.45s var(--ease-out-expo);
+}
+.lightbox-nav {
+  position: absolute;
+  top: 50%;
+  translate: 0 -50%;
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 9999px;
+  border: 1px solid var(--color-moss-700);
+  background: rgb(26 36 25 / 0.8);
+  color: var(--color-mist);
+  transition:
+    border-color 0.3s ease,
+    color 0.3s ease;
+}
+.lightbox-nav:hover {
+  border-color: var(--color-sage-400);
+  color: var(--color-sage-400);
+}
+.lightbox-nav[hidden] {
+  display: none;
+}
+
+/* ------------------------------------------------------------------
+   Keyframes
+   ------------------------------------------------------------------ */
+@keyframes word-up {
+  to {
+    transform: translateY(0);
+  }
+}
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes zoom-in {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+}
+@keyframes drop-in {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+}
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes spin-reverse {
+  from {
+    transform: scale(0.82) rotate(0deg);
+  }
+  to {
+    transform: scale(0.82) rotate(-360deg);
+  }
+}
+@keyframes grid-pulse {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(340%);
+  }
+}
+@keyframes ken-burns {
+  from {
+    transform: scale(1.02) translate(0, 0);
+  }
+  to {
+    transform: scale(1.12) translate(-2%, -1.5%);
+  }
+}
+@keyframes band-in-top {
+  from {
+    transform: translate(18px, -3px);
+    opacity: 0;
+  }
+}
+@keyframes band-in-bottom {
+  from {
+    transform: translate(-18px, 3px);
+    opacity: 0;
+  }
+}
+@keyframes pulse-dot {
+  50% {
+    opacity: 0.3;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
+    transition-delay: 0ms !important;
+  }
+  .marquee-track,
+  .ambient svg,
+  .hero-grid-pulse,
+  .cover-img {
+    animation: none !important;
+  }
+}

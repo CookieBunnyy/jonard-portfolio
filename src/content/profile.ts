@@ -1,0 +1,22 @@
+export const profile = {
+  name: 'Jonard Rustique',
+  fullName: 'Jonard Roa Rustique',
+  role: 'UI/UX Designer & Frontend Developer',
+  tagline: 'Build it sturdy. Make it calm.',
+  location: 'Bacoor, Cavite, Philippines',
+  email: 'jonard.rustique@cvsu.edu.ph',
+  github: { label: 'github.com/jonardecoder', href: 'https://github.com/jonardecoder' },
+  school: 'Cavite State University – Bacoor City Campus',
+  program: 'BS Computer Science',
+  siteUrl: 'https://jonardecoder.github.io/Website-Portfolio/',
+  repoUrl: 'https://github.com/jonardecoder/Website-Portfolio',
+  lastUpdated: { label: 'November 2026', iso: '2026-11-13' },
+  version: '2.0',
+  portrait: {
+    src: 'images/profile.webp',
+    thumb: 'images/profile-thumb.webp',
+    alt: 'Jonard Rustique standing outdoors at night in a green and yellow jacket',
+    width: 900,
+    height: 1200,
+  },
+} as const;
