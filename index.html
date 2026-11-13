@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Jonardzu</title>
+<meta name="description" content="Portfolio of Jonard Rustique, Software & Poging Programmer." />
+
+<!-- Tailwind CDN -->
+<script src="https://cdn.tailwindcss.com"></script>
+<!-- Lucide Icons -->
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+<!-- Fonts: Fraunces (organic display serif) + Inter (clean body) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          moss: {
+            bg: '#1A2419',
+            card: '#253324',
+            cardHover: '#2B3B29',
+            sage: '#A3B19B',
+            sageDeep: '#8A9A86',
+            textPrimary: '#E2E8E0',
+            textMuted: '#9EAC9C',
+            border: '#3A4A38',
+          }
+        },
+        fontFamily: {
+          display: ['"Fraunces"', 'serif'],
+          body: ['"Inter"', 'sans-serif'],
+          mono: ['"JetBrains Mono"', 'monospace'],
+        },
+        boxShadow: {
+          glow: '0 0 0 1px rgba(163,177,155,0.25), 0 8px 30px -6px rgba(163,177,155,0.25)',
+          glowLg: '0 0 0 1px rgba(163,177,155,0.35), 0 20px 60px -12px rgba(138,154,134,0.45)',
+        },
+        keyframes: {
+          pulseRing: {
+            '0%': { transform: 'scale(0.9)', opacity: '0.8' },
+            '70%': { transform: 'scale(1.8)', opacity: '0' },
+            '100%': { transform: 'scale(1.8)', opacity: '0' },
+          },
+          fadeUp: {
+            '0%': { opacity: '0', transform: 'translateY(16px)' },
+            '100%': { opacity: '1', transform: 'translateY(0)' },
+          },
+          blink: {
+            '0%, 49%': { opacity: '1' },
+            '50%, 100%': { opacity: '0' },
+          },
+          growRing: {
+            '0%': { strokeDashoffset: '440' },
+            '100%': { strokeDashoffset: '0' },
+          },
+          floatSlow: {
+            '0%, 100%': { transform: 'translateY(0px)' },
+            '50%': { transform: 'translateY(-10px)' },
+          }
+        },
+        animation: {
+          pulseRing: 'pulseRing 2s cubic-bezier(0.4,0,0.6,1) infinite',
+          fadeUp: 'fadeUp 0.7s ease-out forwards',
+          blink: 'blink 1s step-start infinite',
+          growRing: 'growRing 1.8s ease-out forwards',
+          floatSlow: 'floatSlow 6s ease-in-out infinite',
+        }
+      }
+    }
+  }
+</script>
+
+<style>
+  html { scroll-behavior: smooth; }
+  body { background-color: #1A2419; }
+
+  ::selection { background: #8A9A86; color: #1A2419; }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 10px; }
+  ::-webkit-scrollbar-track { background: #1A2419; }
+  ::-webkit-scrollbar-thumb { background: #3A4A38; border-radius: 6px; }
+  ::-webkit-scrollbar-thumb:hover { background: #8A9A86; }
+
+  .glass {
+    background: rgba(37, 51, 36, 0.65);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+  }
+
+  .grain {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* Organic asymmetric frame for portrait */
+  .organic-frame {
+    border-radius: 42% 58% 63% 37% / 41% 44% 56% 59%;
+    transition: border-radius 1.2s ease-in-out;
+  }
+  .organic-frame:hover {
+    border-radius: 58% 42% 37% 63% / 56% 59% 41% 44%;
+  }
+
+  .portrait-img {
+    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .portrait-wrap:hover .portrait-img {
+    transform: scale(1.1);
+  }
+
+  .type-cursor::after {
+    content: '|';
+    animation: blink 1s step-start infinite;
+    color: #A3B19B;
+    font-weight: 300;
+  }
+
+  .nav-link { position: relative; }
+  .nav-link::after {
+    content: '';
+    position: absolute;
+    left: 0; bottom: -4px;
+    width: 0%; height: 1px;
+    background: #A3B19B;
+    transition: width 0.35s ease;
+  }
+  .nav-link:hover::after { width: 100%; }
+
+  .project-card {
+    transition: transform 0.45s cubic-bezier(0.22,1,0.36,1), box-shadow 0.45s ease, border-color 0.45s ease;
+  }
+  .project-card:hover {
+    transform: translateY(-6px) scale(1.015);
+    box-shadow: 0 0 0 1px rgba(163,177,155,0.35), 0 24px 48px -16px rgba(138,154,134,0.35);
+    border-color: rgba(163,177,155,0.45);
+  }
+
+  .skill-badge { transition: all 0.35s ease; }
+  .skill-badge:hover {
+    background-color: #A3B19B;
+    color: #1A2419;
+    transform: translateY(-3px);
+  }
+  .skill-badge:hover .skill-detail { opacity: 1; transform: translateY(0); }
+  .skill-detail { transition: all 0.3s ease; opacity: 0; transform: translateY(4px); }
+
+  .timeline-node {
+    box-shadow: 0 0 0 4px rgba(26,36,25,1), 0 0 0 6px rgba(163,177,155,0.3), 0 0 18px 2px rgba(163,177,155,0.55);
+  }
+
+  .modal-backdrop { backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+
+  input:focus, textarea:focus, select:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(163,177,155,0.55);
+  }
+
+  .fade-section { opacity: 0; transform: translateY(24px); transition: opacity 0.8s ease, transform 0.8s ease; }
+  .fade-section.in-view { opacity: 1; transform: translateY(0); }
+
+  .btn-primary {
+    background: #A3B19B;
+    color: #1A2419;
+    transition: all 0.3s ease;
+  }
+  .btn-primary:hover {
+    background: #E2E8E0;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px -8px rgba(163,177,155,0.6);
+  }
+  .btn-outline {
+    border: 1px solid #3A4A38;
+    color: #E2E8E0;
+    transition: all 0.3s ease;
+  }
+  .btn-outline:hover {
+    border-color: #A3B19B;
+    background: rgba(163,177,155,0.08);
+    transform: translateY(-2px);
+  }
+
+  .filter-pill.active {
+    background: #A3B19B;
+    color: #1A2419;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+</style>
+</head>
+
+<body class="bg-moss-bg text-moss-textPrimary font-body antialiased relative">
+<div class="grain"></div>
+
+<!-- ============ NAV ============ -->
+<nav id="navbar" class="fixed top-0 inset-x-0 z-40 transition-all duration-300">
+  <div class="max-w-6xl mx-auto px-6 lg:px-8">
+    <div id="navInner" class="glass rounded-b-2xl border-b border-moss-border/60 flex items-center justify-between px-5 py-4 transition-all duration-300">
+      <a href="#home" class="font-display text-xl tracking-wide text-moss-textPrimary">
+        J<span class="text-moss-sage">.</span>Rustique
+      </a>
+      <ul class="hidden md:flex items-center gap-8 text-sm text-moss-textMuted">
+        <li><a href="#home" class="nav-link hover:text-moss-textPrimary transition">Home</a></li>
+        <li><a href="#projects" class="nav-link hover:text-moss-textPrimary transition">Work</a></li>
+        <li><a href="#skills" class="nav-link hover:text-moss-textPrimary transition">Skills</a></li>
+        <li><a href="#timeline" class="nav-link hover:text-moss-textPrimary transition">Journey</a></li>
+        <li><a href="#contact" class="nav-link hover:text-moss-textPrimary transition">Contact</a></li>
+      </ul>
+      <a href="#contact" class="hidden md:inline-flex btn-primary text-sm font-medium px-5 py-2.5 rounded-full">
+        Let's talk
+      </a>
+      <button id="menuBtn" class="md:hidden text-moss-textPrimary" aria-label="Open menu">
+        <i data-lucide="menu" class="w-6 h-6"></i>
+      </button>
+    </div>
+    <!-- mobile menu -->
+    <div id="mobileMenu" class="md:hidden hidden glass rounded-2xl mt-2 border border-moss-border/60 px-5 py-4">
+      <ul class="flex flex-col gap-4 text-sm text-moss-textMuted">
+        <li><a href="#home" class="mobile-link block py-1">Home</a></li>
+        <li><a href="#projects" class="mobile-link block py-1">Work</a></li>
+        <li><a href="#skills" class="mobile-link block py-1">Skills</a></li>
+        <li><a href="#timeline" class="mobile-link block py-1">Journey</a></li>
+        <li><a href="#contact" class="mobile-link block py-1">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- ============ HERO ============ -->
+<header id="home" class="relative pt-40 pb-24 px-6 lg:px-8 overflow-hidden">
+  <!-- ambient blobs -->
+  <div class="absolute -top-32 -left-32 w-96 h-96 bg-moss-sageDeep/10 rounded-full blur-3xl animate-floatSlow"></div>
+  <div class="absolute top-40 -right-24 w-80 h-80 bg-moss-sage/10 rounded-full blur-3xl animate-floatSlow" style="animation-delay:2s"></div>
+
+  <div class="max-w-6xl mx-auto grid lg:grid-cols-2 gap-16 items-center relative z-10">
+
+    <!-- Left: Portrait -->
+    <div class="flex justify-center lg:justify-start order-2 lg:order-1 animate-fadeUp">
+      <div class="portrait-wrap relative w-72 h-80 sm:w-80 sm:h-96">
+        <!-- growth ring svg -->
+        <svg class="absolute -inset-6 w-[calc(100%+3rem)] h-[calc(100%+3rem)] pointer-events-none" viewBox="0 0 200 220">
+          <ellipse cx="100" cy="110" rx="92" ry="102" fill="none" stroke="#A3B19B" stroke-width="1" stroke-dasharray="440" stroke-dashoffset="440" opacity="0.5" class="animate-growRing"/>
+        </svg>
+        <div class="organic-frame overflow-hidden w-full h-full border border-moss-sage/30 shadow-glowLg relative bg-moss-card">
+          <img
+            class="portrait-img w-full h-full object-cover"
+            src="C:\Users\renzp\OneDrive\Documents\Jonard's Portfolio\profile.jpg.jpeg"
+            alt="Professional portrait of Jonard Rustique"
+          />
+          <div class="absolute inset-0 bg-gradient-to-t from-moss-bg/40 via-transparent to-transparent"></div>
+        </div>
+        <!-- floating badge -->
+        <div class="absolute -bottom-5 -right-4 sm:right-2 glass border border-moss-border/70 rounded-2xl px-4 py-3 shadow-glow flex items-center gap-2 animate-fadeUp" style="animation-delay:0.3s">
+          <span class="relative flex h-2.5 w-2.5">
+            <span class="animate-pulseRing absolute inline-flex h-full w-full rounded-full bg-emerald-400"></span>
+            <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-400"></span>
+          </span>
+          <span class="text-xs text-moss-textPrimary font-medium">Available for work</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: Content -->
+    <div class="order-1 lg:order-2 animate-fadeUp" style="animation-delay:0.15s">
+      <p class="font-mono text-xs tracking-[0.25em] uppercase text-moss-sage mb-4">Portfolio — Est. 2019</p>
+      <h1 class="font-display text-4xl sm:text-5xl lg:text-6xl leading-[1.05] text-moss-textPrimary mb-4">
+        Hi, I'm Jonard Rustique.<br/>
+        <span class="text-moss-sage" id="typedRole">Systems Programmer</span><span class="type-cursor"></span>
+      </h1>
+      <p class="text-moss-textMuted text-base sm:text-lg max-w-lg mb-8 leading-relaxed">
+        Poging Computer Science student crafting software systems built to last — from modular UI/UX Designer, web applications to database architectures. I care most about robust systems that fail gracefully, and clean interfaces that make complex workflows feel calm.
+      </p>
+
+      <div class="flex flex-wrap items-center gap-4 mb-8">
+        <button id="openProfileModal" class="group inline-flex items-center gap-2 btn-outline rounded-full px-6 py-3 text-sm font-medium">
+          <i data-lucide="user-round" class="w-4 h-4 text-moss-sage"></i>
+          Click to Know Me
+          <i data-lucide="arrow-up-right" class="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"></i>
+        </button>
+      </div>
+
+      <div class="flex flex-wrap gap-4">
+        <a href="#projects" class="btn-primary rounded-full px-7 py-3 text-sm font-semibold">View Work</a>
+        <a href="#contact" class="btn-outline rounded-full px-7 py-3 text-sm font-medium">Get in Touch</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ============ PROFILE MODAL ============ -->
+<div id="profileModal" class="fixed inset-0 z-50 hidden items-center justify-center px-4">
+  <div id="profileBackdrop" class="absolute inset-0 bg-moss-bg/80 modal-backdrop"></div>
+  <div class="relative w-full max-w-lg bg-moss-card border border-moss-border rounded-3xl shadow-glowLg p-8 sm:p-10 transform transition-all duration-300 scale-95 opacity-0" id="profileCard">
+    <button id="closeProfileModal" class="absolute top-5 right-5 text-moss-textMuted hover:text-moss-textPrimary transition" aria-label="Close">
+      <i data-lucide="x" class="w-5 h-5"></i>
+    </button>
+
+    <div class="flex items-center gap-4 mb-6">
+      <div class="w-16 h-16 rounded-2xl overflow-hidden border border-moss-sage/30 flex-shrink-0">
+        <img src="C:\Users\renzp\OneDrive\Documents\Jonard's Portfolio\profile.jpg.jpeg" class="w-full h-full object-cover" alt="Jonard Rustique" />
+      </div>
+      <div>
+        <h3 class="font-display text-2xl text-moss-textPrimary">Jonard Rustique</h3>
+        <p class="text-moss-sage text-sm font-mono">Software &amp; Systems Developer</p>
+      </div>
+    </div>
+
+    <dl class="grid grid-cols-2 gap-4 mb-6 text-sm">
+      <div class="bg-moss-bg/60 rounded-xl p-4 border border-moss-border/60">
+        <dt class="text-moss-textMuted text-xs uppercase tracking-wide mb-1">Status</dt>
+        <dd class="text-moss-textPrimary font-medium">4th Year BSCS Student</dd>
+      </div>
+      <div class="bg-moss-bg/60 rounded-xl p-4 border border-moss-border/60">
+        <dt class="text-moss-textMuted text-xs uppercase tracking-wide mb-1">University</dt>
+        <dd class="text-moss-textPrimary font-medium">CvSU - Bacoor</dd>
+      </div>
+      <div class="bg-moss-bg/60 rounded-xl p-4 border border-moss-border/60 col-span-2">
+        <dt class="text-moss-textMuted text-xs uppercase tracking-wide mb-1">Specialization</dt>
+        <dd class="text-moss-textPrimary font-medium">UI/UX Designer &amp; Frontend Developer</dd>
+      </div>
+    </dl>
+
+    <p class="text-moss-textMuted text-sm leading-relaxed mb-6">
+      Computer Science student crafting software systems built to last — from modular full-stack web applications to database architectures. I care most about robust systems that fail gracefully, and clean interfaces that make complex workflows feel calm.
+    </p>
+
+    <div class="flex flex-wrap gap-2 mb-8">
+      <span class="text-xs font-mono bg-moss-bg border border-moss-border text-moss-sage px-3 py-1.5 rounded-full">Web Systems</span>
+      <span class="text-xs font-mono bg-moss-bg border border-moss-border text-moss-sage px-3 py-1.5 rounded-full">Database Design</span>
+      <span class="text-xs font-mono bg-moss-bg border border-moss-border text-moss-sage px-3 py-1.5 rounded-full">UI/UX Layouts</span>
+    </div>
+
+    <a href="#contact" id="modalContactBtn" class="btn-primary block text-center rounded-full px-6 py-3 text-sm font-semibold">Kausapin nyo naman ako</a>
+  </div>
+</div>
+
+<!-- ============ PROJECTS ============ -->
+<section id="projects" class="fade-section py-24 px-6 lg:px-8">
+  <div class="max-w-6xl mx-auto">
+    <div class="mb-12">
+      <p class="font-mono text-xs tracking-[0.25em] uppercase text-moss-sage mb-3">Selected Work</p>
+      <h2 class="font-display text-3xl sm:text-4xl text-moss-textPrimary mb-4">Projects &amp; Systems</h2>
+      <p class="text-moss-textMuted max-w-xl">A handful of projects I've designed and built during my Computer Science program.</p>
+    </div>
+
+    <!-- Filters -->
+    <div id="filterBar" class="flex flex-wrap gap-3 mb-10">
+      <button class="filter-pill active font-mono text-xs uppercase tracking-wide px-4 py-2 rounded-full border border-moss-border text-moss-textMuted transition" data-filter="all">All</button>
+      <button class="filter-pill font-mono text-xs uppercase tracking-wide px-4 py-2 rounded-full border border-moss-border text-moss-textMuted transition" data-filter="backend">Backend</button>
+      <button class="filter-pill font-mono text-xs uppercase tracking-wide px-4 py-2 rounded-full border border-moss-border text-moss-textMuted transition" data-filter="systems">Systems</button>
+      <button class="filter-pill font-mono text-xs uppercase tracking-wide px-4 py-2 rounded-full border border-moss-border text-moss-textMuted transition" data-filter="tooling">Tooling</button>
+    </div>
+
+    <div id="projectsGrid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+  </div>
+</section>
+
+<!-- ============ PROJECT MODAL ============ -->
+<div id="projectModal" class="fixed inset-0 z-50 hidden items-center justify-center px-4">
+  <div id="projectBackdrop" class="absolute inset-0 bg-moss-bg/85 modal-backdrop"></div>
+  <div class="relative w-full max-w-2xl max-h-[85vh] overflow-y-auto bg-moss-card border border-moss-border rounded-3xl shadow-glowLg p-8 sm:p-10 transform transition-all duration-300 scale-95 opacity-0" id="projectCard">
+    <button id="closeProjectModal" class="absolute top-5 right-5 text-moss-textMuted hover:text-moss-textPrimary transition" aria-label="Close">
+      <i data-lucide="x" class="w-5 h-5"></i>
+    </button>
+    <div id="projectModalBody"></div>
+  </div>
+</div>
+
+<!-- ============ SKILLS ============ -->
+<section id="skills" class="fade-section py-24 px-6 lg:px-8 bg-moss-card/40">
+  <div class="max-w-6xl mx-auto">
+    <div class="mb-12">
+      <p class="font-mono text-xs tracking-[0.25em] uppercase text-moss-sage mb-3">Toolbox</p>
+      <h2 class="font-display text-3xl sm:text-4xl text-moss-textPrimary mb-4">Tech Stack</h2>
+      <p class="text-moss-textMuted max-w-xl">Hover any badge to see how and where I use each tool.</p>
+    </div>
+
+    <div id="skillsContainer" class="space-y-10"></div>
+  </div>
+</section>
+
+<!-- ============ TIMELINE ============ -->
+<section id="timeline" class="fade-section py-24 px-6 lg:px-8">
+  <div class="max-w-4xl mx-auto">
+    <div class="mb-16">
+      <p class="font-mono text-xs tracking-[0.25em] uppercase text-moss-sage mb-3">Path</p>
+      <h2 class="font-display text-3xl sm:text-4xl text-moss-textPrimary mb-4">Experience &amp; Education</h2>
+      <p class="text-moss-textMuted max-w-xl">Growth rings — each marking a major step in my degree and projects.</p>
+    </div>
+
+    <div id="timelineList" class="relative pl-10 sm:pl-14">
+      <div class="absolute left-3 sm:left-5 top-2 bottom-2 w-px bg-gradient-to-b from-moss-sage/60 via-moss-border to-transparent"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CONTACT ============ -->
+<section id="contact" class="fade-section py-24 px-6 lg:px-8 bg-moss-card/40">
+  <div class="max-w-5xl mx-auto grid lg:grid-cols-5 gap-12">
+
+    <div class="lg:col-span-2">
+      <p class="font-mono text-xs tracking-[0.25em] uppercase text-moss-sage mb-3">Get in Touch</p>
+      <h2 class="font-display text-3xl sm:text-4xl text-moss-textPrimary mb-5">Let's build something durable.</h2>
+      <p class="text-moss-textMuted mb-8 leading-relaxed">
+        Open to full-stack, software engineering, and web development opportunities.
+      </p>
+
+      <div class="space-y-4">
+        <a href="mailto:jonard.rustique@cvsu.edu.ph" class="group flex items-center gap-3 text-moss-textPrimary hover:text-moss-sage transition">
+          <span class="w-10 h-10 rounded-full bg-moss-bg border border-moss-border flex items-center justify-center group-hover:border-moss-sage transition">
+            <i data-lucide="mail" class="w-4 h-4"></i>
+          </span>
+          jonard.rustique@cvsu.edu.ph
+        </a>
+        <a href="https://github.com" target="_blank" rel="noopener" class="group flex items-center gap-3 text-moss-textPrimary hover:text-moss-sage transition">
+          <span class="w-10 h-10 rounded-full bg-moss-bg border border-moss-border flex items-center justify-center group-hover:border-moss-sage transition">
+            <i data-lucide="github" class="w-4 h-4"></i>
+          </span>
+          github.com/jonardrustique
+        </a>
+      </div>
+    </div>
+
+    <div class="lg:col-span-3">
+      <form id="contactForm" novalidate class="bg-moss-bg border border-moss-border rounded-3xl p-6 sm:p-8 space-y-5">
+        <div>
+          <label for="name" class="block text-xs uppercase tracking-wide text-moss-textMuted mb-2">Name</label>
+          <input type="text" id="name" name="name" class="w-full bg-moss-card border border-moss-border rounded-xl px-4 py-3 text-sm text-moss-textPrimary placeholder:text-moss-textMuted/50" placeholder="Jane Doe" />
+          <p class="error-msg hidden text-xs text-rose-400 mt-1.5"></p>
+        </div>
+        <div>
+          <label for="email" class="block text-xs uppercase tracking-wide text-moss-textMuted mb-2">Email</label>
+          <input type="email" id="email" name="email" class="w-full bg-moss-card border border-moss-border rounded-xl px-4 py-3 text-sm text-moss-textPrimary placeholder:text-moss-textMuted/50" placeholder="jane@example.com" />
+          <p class="error-msg hidden text-xs text-rose-400 mt-1.5"></p>
+        </div>
+        <div>
+          <label for="message" class="block text-xs uppercase tracking-wide text-moss-textMuted mb-2">Message</label>
+          <textarea id="message" name="message" rows="4" class="w-full bg-moss-card border border-moss-border rounded-xl px-4 py-3 text-sm text-moss-textPrimary placeholder:text-moss-textMuted/50 resize-none" placeholder="Tell me about your project..."></textarea>
+          <p class="error-msg hidden text-xs text-rose-400 mt-1.5"></p>
+        </div>
+        <button type="submit" class="btn-primary w-full rounded-xl px-6 py-3.5 text-sm font-semibold flex items-center justify-center gap-2">
+          <span id="submitLabel">Send Message</span>
+          <i data-lucide="send" class="w-4 h-4"></i>
+        </button>
+        <p id="formSuccess" class="hidden text-sm text-moss-sage text-center pt-1">Thanks — your message has been sent!</p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer class="px-6 lg:px-8 py-10 border-t border-moss-border/60">
+  <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-moss-textMuted">
+    <p>&copy; 2026 Jonard Rustique. Built with intention.</p>
+    <p class="font-mono">CvSU Bacoor — Computer Science 🌱</p>
+  </div>
+</footer>
+
+<!-- Back to top -->
+<button id="backToTop" aria-label="Back to top" class="fixed bottom-8 right-8 z-40 w-12 h-12 rounded-full btn-primary flex items-center justify-center shadow-glow opacity-0 pointer-events-none translate-y-4 transition-all duration-300">
+  <i data-lucide="arrow-up" class="w-5 h-5"></i>
+</button>
+
+<script>
+lucide.createIcons();
+
+/* ---------------- DATA ---------------- */
+const projects = [
+  {
+    title: "Database Normalization & ERP System",
+    category: "backend",
+    tag: "Backend",
+    blurb: "Relational database architecture designed for modular enterprise management.",
+    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=900&auto=format&fit=crop",
+    details: "Normalized database structures up to 3NF, creating optimized schemas, foreign key relationships, and responsive dashboards for enterprise resource planning.",
+    tech: ["MySQL", "SQL", "PHP", "Tailwind CSS"]
+  },
+  {
+    title: "2D / 3D Interactive Game Architecture",
+    category: "systems",
+    tag: "Systems",
+    blurb: "Custom game logic and player mechanics using Godot Engine.",
+    image: "https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=900&auto=format&fit=crop",
+    details: "Configured physics bodies, collision detection, and custom movement state machines using GDScript in Godot Engine.",
+    tech: ["Godot Engine", "GDScript", "Physics Engine"]
+  },
+  {
+    title: "Help Desk Ticketing & Management UI",
+    category: "tooling",
+    tag: "Tooling",
+    blurb: "Streamlined ticketing interface for tracking technical support requests.",
+    image: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=900&auto=format&fit=crop",
+    details: "Built interactive web layouts for role-based help desk workflows, request status tracking, and structured user reporting.",
+    tech: ["HTML5", "CSS3", "JavaScript", "Figma"]
+  }
+];
+
+const skillGroups = [
+  {
+    name: "Languages & Core Development",
+    icon: "code-2",
+    items: [
+      { name: "C++", level: "Proficient", detail: "Data structures & logic" },
+      { name: "Python", level: "Proficient", detail: "Scripting & algorithms" },
+      { name: "JavaScript", level: "Proficient", detail: "Dynamic UI interactions" },
+      { name: "SQL", level: "Advanced", detail: "Queries, normalization & schemas" }
+    ]
+  },
+  {
+    name: "Frameworks & Engines",
+    icon: "layers",
+    items: [
+      { name: "Godot Engine", level: "Proficient", detail: "2D/3D physics & nodes" },
+      { name: "React Native", level: "Exploring", detail: "Mobile interfaces" },
+      { name: "Tailwind CSS", level: "Advanced", detail: "Responsive UI layout" }
+    ]
+  },
+  {
+    name: "Tools & Environment",
+    icon: "wrench",
+    items: [
+      { name: "Git / GitHub", level: "Advanced", detail: "Version control" },
+      { name: "MySQL Workbench", level: "Advanced", detail: "Database management" },
+      { name: "Figma", level: "Proficient", detail: "Prototyping & wireframes" }
+    ]
+  }
+];
+
+const timelineData = [
+  {
+    year: "2022 — Present",
+    title: "BS Computer Science Student",
+    org: "Cavite State University - Bacoor City Campus",
+    desc: "Focusing on software engineering principles, system analysis, and database management.",
+    type: "edu"
+  }
+];
+
+/* ---------------- MOBILE NAV ---------------- */
+const menuBtn = document.getElementById('menuBtn');
+const mobileMenu = document.getElementById('mobileMenu');
+menuBtn.addEventListener('click', () => {
+  mobileMenu.classList.toggle('hidden');
+});
+document.querySelectorAll('.mobile-link').forEach(link => {
+  link.addEventListener('click', () => mobileMenu.classList.add('hidden'));
+});
+
+/* ---------------- NAVBAR SHRINK ---------------- */
+const navInner = document.getElementById('navInner');
+window.addEventListener('scroll', () => {
+  if (window.scrollY > 40) {
+    navInner.classList.add('py-2.5');
+    navInner.classList.remove('py-4');
+  } else {
+    navInner.classList.remove('py-2.5');
+    navInner.classList.add('py-4');
+  }
+});
+
+/* ---------------- TYPING EFFECT ---------------- */
+const roles = ["Systems Programmer", "Full-Stack Developer", "BSCS Student", "Game Developer"];
+const typedEl = document.getElementById('typedRole');
+let roleIdx = 0, charIdx = 0, deleting = false;
+
+function typeLoop() {
+  const current = roles[roleIdx];
+  if (!deleting) {
+    charIdx++;
+    typedEl.textContent = current.slice(0, charIdx);
+    if (charIdx === current.length) {
+      deleting = true;
+      setTimeout(typeLoop, 1600);
+      return;
+    }
+  } else {
+    charIdx--;
+    typedEl.textContent = current.slice(0, charIdx);
+    if (charIdx === 0) {
+      deleting = false;
+      roleIdx = (roleIdx + 1) % roles.length;
+    }
+  }
+  setTimeout(typeLoop, deleting ? 40 : 85);
+}
+typeLoop();
+
+/* ---------------- PROFILE MODAL ---------------- */
+const profileModal = document.getElementById('profileModal');
+const profileCard = document.getElementById('profileCard');
+const openProfileBtn = document.getElementById('openProfileModal');
+const closeProfileBtn = document.getElementById('closeProfileModal');
+const profileBackdrop = document.getElementById('profileBackdrop');
+const modalContactBtn = document.getElementById('modalContactBtn');
+
+function openProfile() {
+  profileModal.classList.remove('hidden');
+  profileModal.classList.add('flex');
+  document.body.style.overflow = 'hidden';
+  setTimeout(() => {
+    profileCard.classList.remove('scale-95', 'opacity-0');
+    profileCard.classList.add('scale-100', 'opacity-100');
+  }, 10);
+}
+
+function closeProfile() {
+  profileCard.classList.remove('scale-100', 'opacity-100');
+  profileCard.classList.add('scale-95', 'opacity-0');
+  setTimeout(() => {
+    profileModal.classList.remove('flex');
+    profileModal.classList.add('hidden');
+    document.body.style.overflow = '';
+  }, 300);
+}
+
+openProfileBtn.addEventListener('click', openProfile);
+closeProfileBtn.addEventListener('click', closeProfile);
+profileBackdrop.addEventListener('click', closeProfile);
+if (modalContactBtn) modalContactBtn.addEventListener('click', closeProfile);
+
+/* ---------------- RENDER PROJECTS ---------------- */
+const projectsGrid = document.getElementById('projectsGrid');
+const projectModal = document.getElementById('projectModal');
+const projectCard = document.getElementById('projectCard');
+const projectModalBody = document.getElementById('projectModalBody');
+const closeProjectModal = document.getElementById('closeProjectModal');
+const projectBackdrop = document.getElementById('projectBackdrop');
+
+function renderProjects(filter = 'all') {
+  projectsGrid.innerHTML = '';
+  const filtered = filter === 'all' ? projects : projects.filter(p => p.category === filter);
+  
+  filtered.forEach((p, idx) => {
+    const card = document.createElement('div');
+    card.className = 'project-card bg-moss-card border border-moss-border/80 rounded-3xl overflow-hidden flex flex-col justify-between cursor-pointer';
+    card.innerHTML = `
+      <div>
+        <div class="h-48 overflow-hidden relative">
+          <img src="${p.image}" alt="${p.title}" class="w-full h-full object-cover transition-transform duration-500 hover:scale-105" />
+          <span class="absolute top-4 right-4 bg-moss-bg/80 backdrop-blur-md border border-moss-border text-moss-sage font-mono text-xs px-3 py-1 rounded-full">${p.tag}</span>
+        </div>
+        <div class="p-6">
+          <h3 class="font-display text-xl text-moss-textPrimary mb-2">${p.title}</h3>
+          <p class="text-moss-textMuted text-sm leading-relaxed mb-4">${p.blurb}</p>
+        </div>
+      </div>
+      <div class="px-6 pb-6 pt-0 flex flex-wrap gap-2">
+        ${p.tech.map(t => `<span class="text-[11px] font-mono bg-moss-bg border border-moss-border/60 text-moss-textMuted px-2.5 py-1 rounded-md">${t}</span>`).join('')}
+      </div>
+    `;
+    card.addEventListener('click', () => openProjectModal(p));
+    projectsGrid.appendChild(card);
+  });
+}
+
+function openProjectModal(p) {
+  projectModalBody.innerHTML = `
+    <span class="text-xs font-mono uppercase text-moss-sage border border-moss-border px-3 py-1 rounded-full mb-4 inline-block">${p.tag}</span>
+    <h3 class="font-display text-2xl sm:text-3xl text-moss-textPrimary mb-4">${p.title}</h3>
+    <img src="${p.image}" alt="${p.title}" class="w-full h-56 object-cover rounded-2xl border border-moss-border mb-6" />
+    <p class="text-moss-textMuted text-sm leading-relaxed mb-6">${p.details}</p>
+    <div class="flex flex-wrap gap-2">
+      ${p.tech.map(t => `<span class="text-xs font-mono bg-moss-bg border border-moss-border text-moss-sage px-3 py-1.5 rounded-full">${t}</span>`).join('')}
+    </div>
+  `;
+  projectModal.classList.remove('hidden');
+  projectModal.classList.add('flex');
+  document.body.style.overflow = 'hidden';
+  setTimeout(() => {
+    projectCard.classList.remove('scale-95', 'opacity-0');
+    projectCard.classList.add('scale-100', 'opacity-100');
+  }, 10);
+}
+
+function closeProjectModalFunc() {
+  projectCard.classList.remove('scale-100', 'opacity-100');
+  projectCard.classList.add('scale-95', 'opacity-0');
+  setTimeout(() => {
+    projectModal.classList.remove('flex');
+    projectModal.classList.add('hidden');
+    document.body.style.overflow = '';
+  }, 300);
+}
+
+closeProjectModal.addEventListener('click', closeProjectModalFunc);
+projectBackdrop.addEventListener('click', closeProjectModalFunc);
+
+/* Filters */
+document.querySelectorAll('.filter-pill').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-pill').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderProjects(btn.dataset.filter);
+  });
+});
+renderProjects();
+
+/* ---------------- RENDER SKILLS ---------------- */
+const skillsContainer = document.getElementById('skillsContainer');
+skillGroups.forEach(group => {
+  const groupEl = document.createElement('div');
+  groupEl.innerHTML = `
+    <div class="flex items-center gap-3 mb-4">
+      <i data-lucide="${group.icon}" class="w-5 h-5 text-moss-sage"></i>
+      <h3 class="font-display text-lg text-moss-textPrimary">${group.name}</h3>
+    </div>
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+      ${group.items.map(item => `
+        <div class="skill-badge bg-moss-card border border-moss-border/70 rounded-2xl p-4 cursor-default">
+          <p class="font-medium text-sm text-moss-textPrimary">${item.name}</p>
+          <p class="text-xs text-moss-sage font-mono mt-0.5">${item.level}</p>
+          <p class="skill-detail text-[11px] text-moss-textMuted mt-2">${item.detail}</p>
+        </div>
+      `).join('')}
+    </div>
+  `;
+  skillsContainer.appendChild(groupEl);
+});
+lucide.createIcons();
+
+/* ---------------- RENDER TIMELINE ---------------- */
+const timelineList = document.getElementById('timelineList');
+timelineData.forEach(item => {
+  const el = document.createElement('div');
+  el.className = 'relative mb-12 last:mb-0';
+  el.innerHTML = `
+    <div class="timeline-node absolute -left-[31px] sm:-left-[43px] top-1.5 w-3 h-3 rounded-full bg-moss-sage"></div>
+    <span class="font-mono text-xs text-moss-sage uppercase tracking-wider block mb-1">${item.year}</span>
+    <h3 class="font-display text-xl text-moss-textPrimary">${item.title}</h3>
+    <p class="text-xs font-mono text-moss-textMuted mb-2">${item.org}</p>
+    <p class="text-moss-textMuted text-sm leading-relaxed">${item.desc}</p>
+  `;
+  timelineList.appendChild(el);
+});
+
+/* ---------------- INTERSECTION OBSERVER FOR FADE SECTIONS ---------------- */
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('in-view');
+    }
+  });
+}, { threshold: 0.15 });
+
+document.querySelectorAll('.fade-section').forEach(sec => observer.observe(sec));
+
+/* ---------------- BACK TO TOP ---------------- */
+const backToTopBtn = document.getElementById('backToTop');
+window.addEventListener('scroll', () => {
+  if (window.scrollY > 500) {
+    backToTopBtn.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4');
+    backToTopBtn.classList.add('opacity-100', 'pointer-events-auto', 'translate-y-0');
+  } else {
+    backToTopBtn.classList.add('opacity-0', 'pointer-events-none', 'translate-y-4');
+    backToTopBtn.classList.remove('opacity-100', 'pointer-events-auto', 'translate-y-0');
+  }
+});
+backToTopBtn.addEventListener('click', () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
+/* ---------------- FORM VALIDATION ---------------- */
+const contactForm = document.getElementById('contactForm');
+const formSuccess = document.getElementById('formSuccess');
+
+contactForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+  let valid = true;
+
+  ['name', 'email', 'message'].forEach(id => {
+    const input = document.getElementById(id);
+    const error = input.nextElementSibling;
+    if (!input.value.trim()) {
+      error.textContent = 'This field is required.';
+      error.classList.remove('hidden');
+      valid = false;
+    } else if (id === 'email' && !/\S+@\S+\.\S+/.test(input.value)) {
+      error.textContent = 'Please enter a valid email address.';
+      error.classList.remove('hidden');
+      valid = false;
+    } else {
+      error.classList.add('hidden');
+    }
+  });
+
+  if (valid) {
+    formSuccess.classList.remove('hidden');
+    contactForm.reset();
+    setTimeout(() => formSuccess.classList.add('hidden'), 5000);
+  }
+});
+</script>
+</body>
+</html>
