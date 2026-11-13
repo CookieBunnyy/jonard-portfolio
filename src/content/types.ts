@@ -7,6 +7,8 @@ export interface Image {
   width: number;
   height: number;
   caption?: string;
+  /** Short label (2–3 words) for compact layouts */
+  label?: string;
   /** CSS object-position used when the image is cropped, e.g. '50% 40%' */
   focus?: string;
 }

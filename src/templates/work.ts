@@ -31,32 +31,31 @@ const stackList = (stack: string[]): string => `
 
 function gallery(p: FeaturedProject): string {
   if (!p.gallery?.length) return '';
-  // Bento layout: one large feature photo, two stacked beside it. The whole
-  // block shares the page's slanted top/bottom edge (.slant-box).
-  const cells = [
-    'col-span-2 aspect-[4/5] md:col-span-7 md:row-span-2 md:aspect-auto',
-    'aspect-[3/4] md:col-span-5 md:aspect-auto',
-    'aspect-[3/4] md:col-span-5 md:aspect-auto',
-  ];
+  // Expanding panels: the active photo widens to show its caption, the others
+  // narrow to a vertical label. On small screens the panels stack.
   return `
-    <div class="bento slant-box mt-14 grid grid-cols-2 gap-3 sm:gap-4 md:h-[min(78vh,680px)] md:grid-cols-12 md:grid-rows-2" data-reveal>
-      ${each(p.gallery.slice(0, 3), (img, i) => `
-        <div class="${cells[i]} relative">
-          <button type="button" class="bento-cell group absolute inset-0 block overflow-hidden bg-moss-800 text-left" data-lightbox="${p.id}" data-index="${i}"
-            data-src="${img.src}" data-alt="${esc(img.alt)}" data-caption="${esc(img.caption ?? '')}" aria-label="Enlarge photo: ${esc(img.caption ?? img.alt)}">
-            <img src="${img.thumb}" srcset="${img.thumb} 640w, ${img.src} ${img.width}w"
-              sizes="${i === 0 ? '(min-width: 768px) 58vw, 100vw' : '(min-width: 768px) 40vw, 50vw'}"
-              width="${img.width}" height="${img.height}" loading="lazy" decoding="async" alt="${esc(img.alt)}"
-              style="object-position:${img.focus ?? '50% 50%'}"
-              class="absolute inset-0 size-full object-cover transition-transform duration-[900ms] ease-out-expo group-hover:scale-[1.06]" />
-            <span class="absolute inset-0 bg-gradient-to-t from-moss-950/90 via-moss-950/10 to-transparent opacity-80 transition-opacity duration-500 group-hover:opacity-100" aria-hidden="true"></span>
-            <span class="absolute right-4 ${i === 0 ? 'top-4 md:top-10' : 'top-4'} grid size-10 place-items-center rounded-full bg-moss-900/70 text-mist backdrop-blur-sm transition duration-300 group-hover:bg-sage-400 group-hover:text-moss-900">${icon('expand', 'size-4')}</span>
-            <span class="bento-caption absolute inset-x-0 bottom-0 p-4 sm:p-6 ${i === 2 ? 'md:pb-14' : ''}">
-              <span class="eyebrow block text-sage-400">Fig. ${pad(i + 1)}</span>
-              <span class="mt-1.5 block text-sm leading-snug text-mist ${i === 0 ? 'sm:text-base' : 'hidden sm:block'}">${esc(img.caption ?? '')}</span>
+    <div class="panels mt-14 flex flex-col gap-3 md:h-[min(76vh,640px)] md:flex-row md:gap-4" data-panels data-reveal>
+      ${each(p.gallery, (img, i) => `
+        <button type="button" class="panel group relative h-80 overflow-hidden bg-moss-800 text-left sm:h-[26rem] md:h-auto" data-active="${i === 0}"
+          data-lightbox="${p.id}" data-index="${i}" data-src="${img.src}" data-alt="${esc(img.alt)}" data-caption="${esc(img.caption ?? '')}"
+          aria-label="Enlarge photo: ${esc(img.caption ?? img.alt)}">
+          <img src="${img.thumb}" srcset="${img.thumb} 640w, ${img.src} ${img.width}w" sizes="(min-width: 768px) 60vw, 100vw"
+            width="${img.width}" height="${img.height}" loading="lazy" decoding="async" alt="${esc(img.alt)}"
+            style="object-position:${img.focus ?? '50% 50%'}" class="panel-img absolute inset-0 size-full object-cover" />
+          <span class="panel-shade absolute inset-0" aria-hidden="true"></span>
+
+          <span class="absolute left-5 top-5 font-display text-sm font-medium tabular-nums text-mist sm:left-6 sm:top-6">${pad(i + 1)}<span class="text-mist/50"> / ${pad(p.gallery!.length)}</span></span>
+
+          <span class="panel-label pointer-events-none absolute bottom-6 left-1/2 hidden whitespace-nowrap font-display text-lg font-medium text-mist md:block">${esc(img.label ?? '')}</span>
+
+          <span class="panel-caption absolute inset-x-0 bottom-0 flex items-end justify-between gap-6 p-5 sm:p-7">
+            <span>
+              <span class="eyebrow block text-sage-400">Fig. ${pad(i + 1)} · ${esc(img.label ?? '')}</span>
+              <span class="mt-2 block max-w-sm text-sm leading-snug text-mist sm:text-base">${esc(img.caption ?? '')}</span>
             </span>
-          </button>
-        </div>`)}
+            <span class="grid size-11 shrink-0 place-items-center rounded-full bg-sage-400 text-moss-900 transition-transform duration-500 ease-out-expo group-hover:scale-110">${icon('expand', 'size-4')}</span>
+          </span>
+        </button>`)}
     </div>`;
 }
 
@@ -130,7 +129,7 @@ function cover(p: FeaturedProject): string {
   const [first, ...rest] = p.title.split(' ');
   const lines = [`${first} ${rest.slice(0, -1).join(' ')}`.trim(), rest.at(-1) ?? ''].filter(Boolean);
   return `
-    <div class="cover slant-box relative min-h-[540px] overflow-hidden bg-moss-800 sm:min-h-[560px] md:aspect-[21/9] md:min-h-[520px]" data-reveal>
+    <div class="cover relative min-h-[540px] overflow-hidden bg-moss-800 sm:min-h-[560px] md:aspect-[21/9] md:min-h-[520px]" data-reveal>
       <img src="${img.src}" srcset="${img.thumb} 640w, ${img.src} ${img.width}w" sizes="100vw"
         width="${img.width}" height="${img.height}" loading="lazy" decoding="async" alt="${esc(img.alt)}"
         style="object-position:${img.focus ?? '50% 50%'}" class="cover-img absolute inset-0 size-full object-cover" />

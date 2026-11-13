@@ -1,8 +1,4 @@
-/**
- * Decorative, purely visual pieces (all aria-hidden).
- * The slant angle is shared with CSS (--slant in main.css) so every slanted
- * edge on the page runs parallel.
- */
+/** Decorative, purely visual pieces (all aria-hidden or labelled links). */
 
 /** Slowly rotating topographic rings — the looping background motif. */
 export function ambientRings(position: string, size = 'w-[900px]'): string {
@@ -17,17 +13,16 @@ export function ambientRings(position: string, size = 'w-[900px]'): string {
     </div>`;
 }
 
-/**
- * Slanted bands over the top and bottom edges of the hero portrait.
- * Coordinates use a 100 × 125 box (the portrait's 4:5 ratio); the image itself
- * is clipped with the same slant in CSS (.slant-portrait).
- */
-export function portraitBands(): string {
+/** Circular rotating text badge that overlaps the hero portrait and links to the work section. */
+export function roleBadge(): string {
   return `
-    <svg class="portrait-bands pointer-events-none absolute inset-0 size-full overflow-visible" viewBox="0 0 100 125" preserveAspectRatio="none" aria-hidden="true">
-      <polygon class="band-top fill-sage-400" points="28,12.6 112,-2.1 112,-9.6 28,5.1" />
-      <line class="band-top" x1="40" y1="6.2" x2="112" y2="-6.4" stroke="#1A2419" stroke-width="1.5" vector-effect="non-scaling-stroke" />
-      <polygon class="band-bottom fill-none stroke-sage-400" points="-12,127.1 72,112.4 72,119.9 -12,134.6" stroke-width="1.5" vector-effect="non-scaling-stroke" />
-      <polygon class="band-bottom-fill fill-sage-400/25" points="-12,127.1 72,112.4 72,119.9 -12,134.6" />
-    </svg>`;
+    <a href="#work" class="role-badge group absolute -bottom-10 -left-4 grid size-28 place-items-center rounded-full bg-sage-400 text-moss-900 sm:-left-10 sm:size-32" aria-label="See selected work">
+      <svg viewBox="0 0 120 120" class="role-badge-text absolute inset-0 size-full" aria-hidden="true">
+        <defs><path id="badge-circle" d="M60,60 m-45,0 a45,45 0 1,1 90,0 a45,45 0 1,1 -90,0" /></defs>
+        <text class="fill-moss-900 font-display text-[10px] font-medium uppercase" letter-spacing="1.6">
+          <textPath href="#badge-circle" textLength="280">UI/UX Designer • Frontend Developer •</textPath>
+        </text>
+      </svg>
+      <svg class="relative size-6 transition-transform duration-500 ease-out-expo group-hover:rotate-45" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
+    </a>`;
 }

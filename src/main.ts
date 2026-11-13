@@ -5,10 +5,11 @@ import './styles/main.css';
 import { initContactForm } from './scripts/contact-form';
 import { initHeader } from './scripts/header';
 import { initLightbox } from './scripts/lightbox';
-import { initParallax, initReveal } from './scripts/motion';
+import { initPanels, initParallax, initReveal } from './scripts/motion';
 
 initHeader();
 initReveal();
 initParallax();
+initPanels();
 initLightbox();
 initContactForm();

@@ -196,54 +196,55 @@
   animation: fade-up 1s var(--ease-out-expo) forwards;
   animation-delay: calc(var(--i) * 90ms);
 }
-.portrait-frame {
-  transition: transform 0.8s var(--ease-out-expo);
+/* Sliced portrait ---------------------------------------------------
+   Five strips of the same photo. Each strip shows its own fifth of the
+   image (the img spans the full grid width and is shifted left), sits at a
+   different height, and lines up when the portrait is hovered. */
+.sliced-grid {
+  --g: 6px;
+  --k: 0.55; /* offset scale on small screens */
+  gap: var(--g);
 }
-.portrait:hover .portrait-frame {
-  transform: translate(0, 0);
-}
-
-/* Slant motif ---------------------------------------------------------
-   One angle for every slanted edge on the page. The portrait edges drop
-   14% of the width-based height; .slant-box uses a fixed pixel depth. */
-.slant-portrait {
-  clip-path: polygon(0 14%, 100% 0, 100% 86%, 0 100%);
-}
-.slant-box {
-  --slant: 28px;
-  clip-path: polygon(0 var(--slant), 100% 0, 100% calc(100% - var(--slant)), 0 100%);
-}
-@media (min-width: 768px) {
-  .slant-box {
-    --slant: 56px;
+@media (min-width: 640px) {
+  .sliced-grid {
+    --g: 8px;
+    --k: 1;
   }
 }
-
-.portrait-shadow {
-  transition: transform 0.8s var(--ease-out-expo);
-}
-.portrait:hover .portrait-shadow {
-  transform: translate(0, 0);
-}
-.portrait-bands .band-top,
-.portrait-bands .band-bottom,
-.portrait-bands .band-bottom-fill {
+.slice {
+  transform: translateY(calc(var(--o) * var(--k) * 1px));
   transition: transform 0.9s var(--ease-out-expo);
+  transition-delay: calc(var(--n) * 45ms);
 }
-/* Bands slide in along the slant on load, and drift apart on hover */
-.js .portrait-bands .band-top {
-  animation: band-in-top 1.2s var(--ease-out-expo) 0.5s both;
+.slice-img {
+  width: calc(500% + 4 * var(--g));
+  left: calc(var(--n) * (100% + var(--g)) * -1);
+  transition: transform 1.2s var(--ease-out-expo);
 }
-.js .portrait-bands .band-bottom,
-.js .portrait-bands .band-bottom-fill {
-  animation: band-in-bottom 1.2s var(--ease-out-expo) 0.65s both;
+.sliced:hover .slice {
+  transform: translateY(0);
 }
-.portrait:hover .band-top {
-  transform: translate(3px, -0.5px);
+.sliced:hover .slice-img {
+  transform: scale(1.04);
 }
-.portrait:hover .band-bottom,
-.portrait:hover .band-bottom-fill {
-  transform: translate(-3px, 0.5px);
+.js .slice {
+  animation: slice-in 1.1s var(--ease-out-expo) both;
+  animation-delay: calc(350ms + var(--n) * 90ms);
+}
+
+/* Rotating role badge */
+.role-badge {
+  box-shadow: 0 0 0 8px var(--color-moss-900);
+  transition: background-color 0.3s ease;
+}
+.role-badge:hover {
+  background-color: var(--color-mist);
+}
+.role-badge-text {
+  animation: spin 22s linear infinite;
+}
+.role-badge:hover .role-badge-text {
+  animation-duration: 8s;
 }
 
 /* Looping background ----------------------------------------------- */
@@ -267,12 +268,50 @@
   animation: grid-pulse 9s ease-in-out infinite;
 }
 
-/* Bento gallery ------------------------------------------------------ */
-.bento-caption {
-  transition: transform 0.6s var(--ease-out-expo);
+/* Expanding panels ---------------------------------------------------- */
+.panel-shade {
+  background: linear-gradient(to top, rgb(17 25 16 / 0.92), rgb(17 25 16 / 0.15) 55%, transparent);
+  transition: background-color 0.6s ease;
 }
-.bento-cell:hover .bento-caption {
-  transform: translateY(-6px);
+.panel-img {
+  transition: transform 1.2s var(--ease-out-expo);
+}
+.panel:hover .panel-img {
+  transform: scale(1.05);
+}
+@media (min-width: 768px) {
+  .panel {
+    flex: 1 1 0;
+    min-width: 0;
+    transition: flex-grow 0.9s var(--ease-out-expo);
+  }
+  .panel[data-active='true'] {
+    flex-grow: 3.4;
+  }
+  .panel[data-active='false'] .panel-shade {
+    background-color: rgb(17 25 16 / 0.45);
+  }
+  .panel-caption {
+    transition:
+      opacity 0.5s ease,
+      transform 0.7s var(--ease-out-expo);
+  }
+  .panel[data-active='false'] .panel-caption {
+    opacity: 0;
+    transform: translateY(16px);
+    transition-duration: 0.2s;
+  }
+  .panel[data-active='true'] .panel-caption {
+    transition-delay: 0.25s;
+  }
+  .panel-label {
+    writing-mode: vertical-rl;
+    transform: translateX(-50%) rotate(180deg);
+    transition: opacity 0.4s ease;
+  }
+  .panel[data-active='true'] .panel-label {
+    opacity: 0;
+  }
 }
 
 /* Cover banner ------------------------------------------------------- */
@@ -538,16 +577,12 @@
     transform: scale(1.12) translate(-2%, -1.5%);
   }
 }
-@keyframes band-in-top {
+@keyframes slice-in {
   from {
-    transform: translate(18px, -3px);
-    opacity: 0;
+    clip-path: inset(100% 0 0 0);
   }
-}
-@keyframes band-in-bottom {
-  from {
-    transform: translate(-18px, 3px);
-    opacity: 0;
+  to {
+    clip-path: inset(0 0 0 0);
   }
 }
 @keyframes pulse-dot {
@@ -571,6 +606,7 @@
   }
   .marquee-track,
   .ambient svg,
+  .role-badge-text,
   .hero-grid-pulse,
   .cover-img {
     animation: none !important;

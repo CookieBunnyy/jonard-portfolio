@@ -48,3 +48,19 @@ export function initParallax(): void {
   );
   desktop.addEventListener('change', update);
 }
+
+/**
+ * Expanding photo panels: the hovered or focused panel becomes the wide one.
+ * The last one chosen stays open, so the layout doesn't jump when the pointer leaves.
+ */
+export function initPanels(): void {
+  $$('[data-panels]').forEach((group) => {
+    const panels = $$('.panel', group);
+    const activate = (target: HTMLElement) =>
+      panels.forEach((panel) => (panel.dataset.active = String(panel === target)));
+    panels.forEach((panel) => {
+      panel.addEventListener('mouseenter', () => activate(panel));
+      panel.addEventListener('focus', () => activate(panel));
+    });
+  });
+}

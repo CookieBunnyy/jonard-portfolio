@@ -35,6 +35,7 @@ export const featuredProjects: FeaturedProject[] = [
         width: 1400,
         height: 1867,
         caption: 'Linear actuator and discharge chute beside the shredder.',
+        label: 'Actuator & chute',
         focus: '50% 45%',
       },
       {
@@ -44,6 +45,7 @@ export const featuredProjects: FeaturedProject[] = [
         width: 1400,
         height: 1867,
         caption: 'Shredder unit mounted on the main frame during assembly.',
+        label: 'Shredder unit',
         focus: '55% 30%',
       },
       {
@@ -53,6 +55,7 @@ export const featuredProjects: FeaturedProject[] = [
         width: 1400,
         height: 1867,
         caption: 'Perforated draining tray feeding the collection bin.',
+        label: 'Drain & collect',
         focus: '50% 50%',
       },
     ],

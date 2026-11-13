@@ -1,5 +1,8 @@
 import { profile } from '../content/profile';
-import { ambientRings, portraitBands } from './decor';
+import { ambientRings, roleBadge } from './decor';
+
+/** Vertical offset (px at desktop size) for each portrait strip. */
+const sliceOffsets = [-30, 14, -12, 26, -20];
 import { icon } from './icons';
 import { each, esc } from './utils';
 
@@ -48,16 +51,19 @@ export function renderHero(): string {
         </div>
 
         <figure class="hero-in relative mx-auto w-full max-w-sm lg:col-span-5 lg:mb-16 lg:max-w-none" style="--i:3">
-          <div class="portrait group relative" data-parallax="0.06">
-            <div class="slant-portrait portrait-shadow absolute inset-0 translate-x-3 translate-y-3 bg-moss-700 sm:translate-x-5 sm:translate-y-5" aria-hidden="true"></div>
-            <div class="slant-portrait relative aspect-[4/5] overflow-hidden bg-moss-800">
-              <img src="${p.src}" srcset="${p.thumb} 640w, ${p.src} 900w" sizes="(min-width: 1024px) 40vw, 90vw"
-                width="${p.width}" height="${p.height}" alt="${esc(p.alt)}" fetchpriority="high"
-                class="size-full object-cover object-[50%_62%] transition-transform duration-[1200ms] ease-out-expo group-hover:scale-[1.04]" />
+          <div class="sliced relative" data-parallax="0.05">
+            <!-- Sliced portrait: one photo cut into five offset strips that line up on hover -->
+            <div class="sliced-grid grid aspect-[4/5] grid-cols-5">
+              ${each(sliceOffsets, (offset, i) => `
+                <div class="slice relative overflow-hidden bg-moss-800" style="--n:${i};--o:${offset}">
+                  <img src="${p.src}" srcset="${p.thumb} 640w, ${p.src} 900w" sizes="(min-width: 1024px) 40vw, 90vw"
+                    width="${p.width}" height="${p.height}" ${i === 0 ? `alt="${esc(p.alt)}" fetchpriority="high"` : 'alt="" aria-hidden="true"'}
+                    class="slice-img absolute top-0 h-full max-w-none object-cover object-[50%_62%]" />
+                </div>`)}
             </div>
-            ${portraitBands()}
+            ${roleBadge()}
           </div>
-          <figcaption class="mt-14 flex items-center gap-2 text-sm text-mist-muted">
+          <figcaption class="mt-10 flex items-center justify-end gap-2 text-sm text-mist-muted sm:mt-12">
             ${icon('mapPin', 'size-4 text-sage-400')} ${esc(profile.location)}
           </figcaption>
         </figure>
