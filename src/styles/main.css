@@ -402,17 +402,6 @@
   animation: fade-up 0.5s var(--ease-out-expo);
 }
 
-.sitemap-block {
-  border: 1px solid var(--color-moss-700);
-  border-radius: 4px;
-  padding: 0.85rem 1rem;
-  background: var(--color-moss-900);
-  transition: border-color 0.3s ease;
-}
-.sitemap-block:hover {
-  border-color: var(--color-sage-500);
-}
-
 /* ------------------------------------------------------------------
    Scroll reveal (only when JS is running)
    ------------------------------------------------------------------ */

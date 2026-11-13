@@ -59,33 +59,6 @@ function gallery(p: FeaturedProject): string {
     </div>`;
 }
 
-/** Wireframe-style map of the APMCB page structure — illustrates the information architecture work. */
-function siteMap(): string {
-  const block = (label: string, body: string, d: number) => `
-    <div class="sitemap-block" data-reveal style="--d:${d}ms">
-      <p class="eyebrow mb-2 text-sage-500">${label}</p>
-      ${body}
-    </div>`;
-  const bar = (w: string) => `<span class="block h-2 rounded-full bg-moss-700" style="width:${w}"></span>`;
-  return `
-    <div class="browser overflow-hidden rounded-md border border-moss-700 bg-moss-950 shadow-[0_30px_80px_-30px_rgba(0,0,0,.6)]" role="img" aria-label="Diagram of the APM Customs Brokerage page structure: hero, about, six service cards, a five-step process, FAQ and contact">
-      <div class="flex items-center gap-3 border-b border-moss-700 px-4 py-3">
-        <span class="flex gap-1.5" aria-hidden="true"><i class="size-2.5 rounded-full bg-moss-700"></i><i class="size-2.5 rounded-full bg-moss-700"></i><i class="size-2.5 rounded-full bg-moss-700"></i></span>
-        <span class="flex-1 truncate rounded-full bg-moss-800 px-3 py-1 text-center text-xs text-mist-muted">apmcb.com</span>
-      </div>
-      <div class="space-y-3 p-4 sm:p-6">
-        ${block('Hero', `<p class="font-display text-lg text-mist">Talk to a licensed broker today</p><div class="mt-3 flex gap-2"><span class="rounded-full bg-sage-400 px-3 py-1 text-[11px] font-semibold text-moss-900">Get in touch</span><span class="rounded-full border border-moss-700 px-3 py-1 text-[11px] text-mist-muted">Our services</span></div>`, 0)}
-        ${block('About', `<div class="space-y-1.5">${bar('80%')}${bar('55%')}</div>`, 60)}
-        ${block('Services', `<div class="grid grid-cols-3 gap-2">${Array.from({ length: 6 }, () => `<span class="h-9 rounded-sm border border-moss-700 bg-moss-800"></span>`).join('')}</div>`, 120)}
-        ${block('How it works', `<div class="flex items-center gap-1.5">${[1, 2, 3, 4, 5].map((n) => `<span class="grid size-7 place-items-center rounded-full border border-sage-500/60 font-display text-[10px] text-sage-400">${pad(n)}</span>`).join('<span class="h-px flex-1 bg-moss-700"></span>')}</div>`, 180)}
-        <div class="grid grid-cols-2 gap-3">
-          ${block('FAQ', `<div class="space-y-1.5">${bar('90%')}${bar('70%')}${bar('80%')}</div>`, 240)}
-          ${block('Contact', `<div class="space-y-1.5"><span class="block h-5 rounded-sm border border-moss-700"></span><span class="block h-5 rounded-sm border border-moss-700"></span><span class="block h-5 w-1/2 rounded-sm bg-sage-400/80"></span></div>`, 300)}
-        </div>
-      </div>
-    </div>`;
-}
-
 function caseSections(p: FeaturedProject, cols: string): string {
   return `
     <div class="grid gap-10 ${cols}">
@@ -129,7 +102,7 @@ function cover(p: FeaturedProject): string {
   const [first, ...rest] = p.title.split(' ');
   const lines = [`${first} ${rest.slice(0, -1).join(' ')}`.trim(), rest.at(-1) ?? ''].filter(Boolean);
   return `
-    <div class="cover relative min-h-[540px] overflow-hidden bg-moss-800 sm:min-h-[560px] md:aspect-[21/9] md:min-h-[520px]" data-reveal>
+    <div class="cover relative w-full min-h-[540px] overflow-hidden bg-moss-800 sm:min-h-[560px] md:aspect-[21/9] md:min-h-[520px]" data-reveal>
       <img src="${img.src}" srcset="${img.thumb} 640w, ${img.src} ${img.width}w" sizes="100vw"
         width="${img.width}" height="${img.height}" loading="lazy" decoding="async" alt="${esc(img.alt)}"
         style="object-position:${img.focus ?? '50% 50%'}" class="cover-img absolute inset-0 size-full object-cover" />
@@ -157,18 +130,14 @@ function renderClient(p: FeaturedProject): string {
   return `
     <article id="${p.id}" aria-labelledby="${p.id}-title" class="mt-28">
       ${cover(p)}
-      <div class="mt-16 grid gap-14 lg:grid-cols-12 lg:gap-12">
-        <div class="lg:col-span-5">
-          <div data-reveal>${meta(p, false)}</div>
-          <p class="mt-8 text-lg leading-relaxed text-mist-muted" data-reveal style="--d:80ms">${esc(p.summary)}</p>
-          <div class="mt-10">${caseSections(p, 'grid-cols-1')}</div>
-        </div>
-        <div class="lg:col-span-7" data-reveal>
-          <p class="eyebrow mb-4 text-sage-500">Page structure</p>
-          ${siteMap()}
-        </div>
+      <div class="mt-16 grid gap-10 md:grid-cols-12 md:gap-8">
+        <div class="md:col-span-4" data-reveal>${meta(p, false)}</div>
+        <p class="max-w-2xl text-lg leading-relaxed text-mist-muted md:col-span-8" data-reveal style="--d:80ms">${esc(p.summary)}</p>
       </div>
-      <div class="mt-12" data-reveal>${stackList(p.stack)}</div>
+      <div class="mt-14 md:pl-[calc(33.333%+1rem)]">
+        ${caseSections(p, 'sm:grid-cols-3')}
+        <div class="mt-10" data-reveal>${stackList(p.stack)}</div>
+      </div>
     </article>`;
 }
 
