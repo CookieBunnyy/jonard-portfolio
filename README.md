@@ -2,7 +2,7 @@
 
 Personal portfolio of **Jonard Roa Rustique**, UI/UX Designer & Frontend Developer and BS Computer Science student at Cavite State University – Bacoor City Campus.
 
-**Live site:** https://jonardecoder.github.io/Website-Portfolio/
+**Live site:** https://cookiebunnyy.github.io/jonard-portfolio/
 
 Sections: **Home · About · Projects · Certificates · Contact**
 

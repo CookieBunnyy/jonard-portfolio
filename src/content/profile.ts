@@ -8,8 +8,8 @@ export const profile = {
   github: { label: 'github.com/jonardecoder', href: 'https://github.com/jonardecoder' },
   school: 'Cavite State University – Bacoor City Campus',
   program: 'BS Computer Science',
-  siteUrl: 'https://jonardecoder.github.io/Website-Portfolio/',
-  repoUrl: 'https://github.com/jonardecoder/Website-Portfolio',
+  siteUrl: 'https://cookiebunnyy.github.io/jonard-portfolio/',
+  repoUrl: 'https://github.com/CookieBunnyy/jonard-portfolio',
   lastUpdated: { label: 'November 2026', iso: '2026-11-13' },
   version: '2.0',
   portrait: {
