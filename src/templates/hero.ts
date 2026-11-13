@@ -28,6 +28,8 @@ export function renderHero(): string {
   const p = profile.portrait;
   return `
   <section id="home" aria-labelledby="hero-title" class="hero relative overflow-hidden bg-moss-900 pt-28 text-mist md:pt-36">
+    <div class="hero-glow -right-40 top-0 size-[620px] sm:size-[820px] lg:-right-24 lg:-top-24 lg:size-[1000px]" aria-hidden="true"></div>
+    <div class="hero-glow hero-glow-b -left-60 bottom-24 size-[520px] lg:size-[700px]" aria-hidden="true"></div>
     <div class="hero-grid" aria-hidden="true"><span class="hero-grid-pulse"></span></div>
     ${ambientRings('-right-64 -top-40 text-sage-400 opacity-[0.09] lg:-right-40')}
     <div class="container-x relative">

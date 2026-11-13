@@ -253,6 +253,20 @@
   animation: grid-pulse 9s ease-in-out infinite;
 }
 
+/* Soft white glows in the hero: they drift and breathe slowly */
+.hero-glow {
+  position: absolute;
+  pointer-events: none;
+  border-radius: 9999px;
+  background: radial-gradient(closest-side, rgb(255 255 255 / 0.2), rgb(255 255 255 / 0.08) 45%, transparent);
+  animation: glow-drift 18s ease-in-out infinite alternate;
+}
+.hero-glow-b {
+  background: radial-gradient(closest-side, rgb(255 255 255 / 0.12), rgb(233 238 230 / 0.04) 50%, transparent);
+  animation-duration: 24s;
+  animation-direction: alternate-reverse;
+}
+
 /* Expanding panels ---------------------------------------------------- */
 .panel-shade {
   background: linear-gradient(to top, rgb(17 25 16 / 0.92), rgb(17 25 16 / 0.15) 55%, transparent);
@@ -559,6 +573,16 @@
     clip-path: inset(0 0 0 0);
   }
 }
+@keyframes glow-drift {
+  from {
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: 0.75;
+  }
+  to {
+    transform: translate3d(-4%, 5%, 0) scale(1.12);
+    opacity: 1;
+  }
+}
 @keyframes pulse-dot {
   50% {
     opacity: 0.3;
@@ -581,6 +605,7 @@
   .marquee-track,
   .ambient svg,
   .hero-grid-pulse,
+  .hero-glow,
   .cover-img {
     animation: none !important;
   }
